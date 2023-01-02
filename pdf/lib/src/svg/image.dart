@@ -74,7 +74,7 @@ class SvgImg extends SvgOperation {
           final img = im.decodeImage(bytes)!;
           image = PdfImage(
             painter.document,
-            image: img.data.buffer.asUint8List(),
+            image: img.toUint8List(),
             width: img.width,
             height: img.height,
           );

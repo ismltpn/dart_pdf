@@ -152,12 +152,13 @@ class PdfImage extends PdfXObject {
     required im.Image image,
     PdfImageOrientation orientation = PdfImageOrientation.topLeft,
   }) {
+    image = image.convert(format: im.Format.uint8, numChannels: 4);
     return PdfImage(
       pdfDocument,
-      image: image.getBytes(format: im.Format.rgba),
+      image: image.toUint8List(),
       width: image.width,
       height: image.height,
-      alpha: image.channels == im.Channels.rgba,
+      alpha: image.numChannels > 3,
       orientation: orientation,
     );
   }

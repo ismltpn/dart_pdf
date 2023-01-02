@@ -254,41 +254,51 @@ class BoxShadow {
 
   im.Image _rect(double width, double height) {
     final shadow = im.Image(
-      (width + spreadRadius * 2).round(),
-      (height + spreadRadius * 2).round(),
+      width: (width + spreadRadius * 2).round(),
+      height: (height + spreadRadius * 2).round(),
     );
 
     im.fillRect(
       shadow,
-      spreadRadius.round(),
-      spreadRadius.round(),
-      (spreadRadius + width).round(),
-      (spreadRadius + height).round(),
-      color.toInt(),
+      x1: spreadRadius.round(),
+      x2: spreadRadius.round(),
+      y1: (spreadRadius + width).round(),
+      y2: (spreadRadius + height).round(),
+      color: _convertColor(color),
     );
 
-    im.gaussianBlur(shadow, blurRadius.round());
+    im.gaussianBlur(shadow, radius: blurRadius.round());
 
     return shadow;
   }
 
   im.Image _ellipse(double width, double height) {
     final shadow = im.Image(
-      (width + spreadRadius * 2).round(),
-      (height + spreadRadius * 2).round(),
+      width: (width + spreadRadius * 2).round(),
+      height: (height + spreadRadius * 2).round(),
     );
 
     im.fillCircle(
       shadow,
-      (spreadRadius + width / 2).round(),
-      (spreadRadius + height / 2).round(),
-      (width / 2).round(),
-      color.toInt(),
+      x: (spreadRadius + width / 2).round(),
+      y: (spreadRadius + height / 2).round(),
+      radius: (width / 2).round(),
+      color: _convertColor(color),
     );
 
-    im.gaussianBlur(shadow, blurRadius.round());
+    im.gaussianBlur(shadow, radius: blurRadius.round());
 
     return shadow;
+  }
+
+  im.Color _convertColor(PdfColor color) {
+    final colorARGB = color.toInt();
+    return im.ColorUint8.fromList([
+      (colorARGB >> 16 & 0xff), // R
+      (colorARGB >> 8 & 0xff), // G
+      (colorARGB >> 0 & 0xff), // B
+      (colorARGB >> 24 & 0xff), // A
+    ]);
   }
 }
 
